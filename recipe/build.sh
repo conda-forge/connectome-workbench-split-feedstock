@@ -24,6 +24,8 @@ else
     exit 1
 fi
 
+# Should be able to remove -DCMAKE_POLICY_VERSION_MINIMUM after next release
+# (current: 2.0.1)
 $CMAKE $CMAKE_ARGS -GNinja \
     -DWORKBENCH_USE_QT5:BOOL=$WORKBENCH_USE_QT5 \
     -DWORKBENCH_USE_QT6:BOOL=$WORKBENCH_USE_QT6 \

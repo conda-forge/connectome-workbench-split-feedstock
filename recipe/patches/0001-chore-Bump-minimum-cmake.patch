@@ -1,0 +1,130 @@
+From 7592fdf8237642f19277ed8485aa18682f616456 Mon Sep 17 00:00:00 2001
+From: "Christopher J. Markiewicz" <markiewicz@stanford.edu>
+Date: Thu, 15 May 2025 11:03:50 -0400
+Subject: [PATCH] chore: Bump minimum cmake
+
+---
+ src/CMakeLists.txt                |  7 +---
+ src/kloewe/cpuinfo/CMakeLists.txt |  8 +----
+ src/kloewe/dot/CMakeLists.txt     | 55 +++++++++----------------------
+ 3 files changed, 17 insertions(+), 53 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index c2aec0391..c0a504c8c 100755
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ #
+ # Minimum required version of CMAKE
+ #
+-CMAKE_MINIMUM_REQUIRED (VERSION 3.0)
++CMAKE_MINIMUM_REQUIRED (VERSION 3.19.6)
+ 
+ #
+ # Project name
+@@ -252,11 +252,6 @@ IF (WORKBENCH_USE_QT6)
+         MESSAGE(SEND_ERROR "Both QT5 and QT6 are selected.  Choose only one of them.")
+     ENDIF (WORKBENCH_USE_QT5)
+     
+-    #
+-    # Minimum required version of CMAKE for Qt 6
+-    #
+-    CMAKE_MINIMUM_REQUIRED (VERSION 3.19.6)
+-    
+     #
+     # Qt 6 requires C++17 compiler
+     #
+diff --git a/src/kloewe/cpuinfo/CMakeLists.txt b/src/kloewe/cpuinfo/CMakeLists.txt
+index f551e2f4e..d4526bdfd 100644
+--- a/src/kloewe/cpuinfo/CMakeLists.txt
++++ b/src/kloewe/cpuinfo/CMakeLists.txt
+@@ -1,13 +1,7 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(cpuinfo)
+ 
+-if(CMAKE_VERSION VERSION_LESS "2.8.12")
+-    function(add_compile_options)
+-        add_definitions(${ARGN})
+-    endfunction(add_compile_options)
+-endif()
+-
+ add_compile_options(-std=c99 -Wall -Wextra -Wno-unused-parameter -Wconversion -Wshadow -pedantic)
+ add_definitions(-DNDEBUG)
+ 
+diff --git a/src/kloewe/dot/CMakeLists.txt b/src/kloewe/dot/CMakeLists.txt
+index 032121339..31c1fbfc9 100644
+--- a/src/kloewe/dot/CMakeLists.txt
++++ b/src/kloewe/dot/CMakeLists.txt
+@@ -1,13 +1,7 @@
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ 
+ project(dot)
+ 
+-if(CMAKE_VERSION VERSION_LESS "2.8.12")
+-    function(add_compile_options)
+-        add_definitions(${ARGN})
+-    endfunction(add_compile_options)
+-endif()
+-
+ add_compile_options(-std=c99 -Wall -Wextra -Wno-unused-parameter -Wconversion -Wshadow -pedantic)
+ 
+ SET(DOT_USEFMA 0)
+@@ -49,38 +43,19 @@ else()
+     target_link_libraries(dot dot_naive dot_sse2 dot_avx cpuinfo ${CARET_QT5_LINK})
+ endif()
+ 
+-if(CMAKE_VERSION VERSION_LESS "2.8.12")
+-    if(DOT_USEFMA AND DOT_USEAVX512)
+-        set_target_properties(dot_avxfma PROPERTIES COMPILE_FLAGS "-mfma -mavx -funroll-loops")
+-        set_target_properties(dot_avx512 PROPERTIES COMPILE_FLAGS "-mavx512f -funroll-loops")
+-        set_target_properties(dot_avx512fma PROPERTIES COMPILE_FLAGS "-mavx512f -mfma -funroll-loops")
+-    elseif(DOT_USEFMA)
+-        set_target_properties(dot_avxfma PROPERTIES COMPILE_FLAGS "-mfma -mavx -funroll-loops")
+-        set_target_properties(dot PROPERTIES COMPILE_FLAGS "-DDOT_NOAVX512")
+-    elseif(DOT_USEAVX512)
+-        set_target_properties(dot_avx512 PROPERTIES COMPILE_FLAGS "-mavx512f -funroll-loops")
+-        set_target_properties(dot PROPERTIES COMPILE_FLAGS "-DDOT_NOFMA")
+-    else()
+-        set_target_properties(dot PROPERTIES COMPILE_FLAGS "-DDOT_NOFMA -DDOT_NOAVX512")
+-    endif()
+-    set_target_properties(dot_avx PROPERTIES COMPILE_FLAGS "-mavx -funroll-loops")
+-    set_target_properties(dot_sse2 PROPERTIES COMPILE_FLAGS "-msse2")
+-    include_directories(../cpuinfo/src)
++if(DOT_USEFMA AND DOT_USEAVX512)
++    target_compile_options(dot_avxfma PRIVATE -mfma -mavx -funroll-loops)
++    target_compile_options(dot_avx512 PRIVATE -mavx512f -funroll-loops)
++    target_compile_options(dot_avx512fma PRIVATE -mavx512f -mfma -funroll-loops)
++elseif(DOT_USEFMA)
++    target_compile_options(dot_avxfma PRIVATE -mfma -mavx -funroll-loops)
++    target_compile_definitions(dot PRIVATE "DOT_NOAVX512")
++elseif(DOT_USEAVX512)
++    target_compile_options(dot_avx512 PRIVATE -mavx512f -funroll-loops)
++    target_compile_definitions(dot PRIVATE "DOT_NOFMA")
+ else()
+-    if(DOT_USEFMA AND DOT_USEAVX512)
+-        target_compile_options(dot_avxfma PRIVATE -mfma -mavx -funroll-loops)
+-        target_compile_options(dot_avx512 PRIVATE -mavx512f -funroll-loops)
+-        target_compile_options(dot_avx512fma PRIVATE -mavx512f -mfma -funroll-loops)
+-    elseif(DOT_USEFMA)
+-        target_compile_options(dot_avxfma PRIVATE -mfma -mavx -funroll-loops)
+-        target_compile_definitions(dot PRIVATE "DOT_NOAVX512")
+-    elseif(DOT_USEAVX512)
+-        target_compile_options(dot_avx512 PRIVATE -mavx512f -funroll-loops)
+-        target_compile_definitions(dot PRIVATE "DOT_NOFMA")
+-    else()
+-        target_compile_definitions(dot PRIVATE "DOT_NOFMA" "DOT_NOAVX512")
+-    endif()
+-    target_compile_options(dot_avx PRIVATE -mavx -funroll-loops)
+-    target_compile_options(dot_sse2 PRIVATE -msse2)
+-    target_include_directories(dot PRIVATE ../cpuinfo/src)
++    target_compile_definitions(dot PRIVATE "DOT_NOFMA" "DOT_NOAVX512")
+ endif()
++target_compile_options(dot_avx PRIVATE -mavx -funroll-loops)
++target_compile_options(dot_sse2 PRIVATE -msse2)
++target_include_directories(dot PRIVATE ../cpuinfo/src)
+-- 
+2.49.0
+

@@ -15,6 +15,7 @@ source:
     - patches/0001-Import-cstdint-into-libCZI.h.patch
     - patches/0001-Fix-unsafe-narrowing.patch
     - patches/0001-chore-build-Find-QuaZip-library.patch
+    - patches/0001-chore-Bump-minimum-cmake.patch
 
 build:
   number: {{ build }}
