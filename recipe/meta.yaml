@@ -1,6 +1,6 @@
 {% set name = "connectome-workbench" %}
 {% set version = "2.0.1" %}
-{% set build = 4 %}
+{% set build = 5 %}
 
 {% set build = build + 100 %}  # [build_variant == "qt6"]
 
@@ -19,13 +19,13 @@ source:
 build:
   number: {{ build }}
   string: "{{ build_variant }}_h{{ PKG_HASH }}_{{ build }}"
-  skip: true  # [osx or win]
+  skip: true  # [win]
 
 requirements:
   build:
     - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - cmake >=3.0
+    - cmake >=3.5
     - ninja
     - qwt
     # OpenMP
@@ -45,7 +45,7 @@ requirements:
     - openssl
     # 1.2 is ABI compatible with 1.3, so this provides more flexibility
     - libzlib =1.2                   # [build_variant == "qt5"]
-    # qt6 is build with 1.3
+    # qt6 is built with 1.3
     - libzlib =1.3                   # [build_variant == "qt6"]
     - zlib
     # No qt6 build yet, use vendored
@@ -68,7 +68,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ stdlib('c') }}
-        - cmake >=3.0
+        - cmake >=3.5
         - ninja
         - qwt
         # OpenMP
@@ -110,7 +110,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - {{ stdlib('c') }}
-        - cmake >=3.0
+        - cmake >=3.5
         - ninja
         - qwt
         # OpenMP
