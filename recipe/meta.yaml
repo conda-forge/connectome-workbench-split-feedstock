@@ -50,8 +50,7 @@ requirements:
     # qt6 is built with 1.3
     - libzlib =1.3                   # [build_variant == "qt6"]
     - zlib
-    # No qt6 build yet, use vendored
-    - quazip                         # [build_variant == "qt5"]
+    - quazip
     - freetype
     - libglu                         # [linux]
     - glew                           # [windows]
