@@ -5,6 +5,14 @@ cd build
 
 if [[ "$target_platform" == linux-* ]]; then
     export CXXFLAGS="$CXXFLAGS -lGL -lGLU"
+    CMAKE="cmake"
+    CTEST="ctest"
+elif [[ "$target_platform" == osx-* ]]; then
+    CMAKE="arch -x86_64 cmake"
+    CTEST="arch -x86_64 ctest"
+else
+    echo "Unsupported platform: $target_platform"
+    exit 1
 fi
 
 if [[ "$build_variant" == "qt6" ]]; then
@@ -18,17 +26,20 @@ else
     exit 1
 fi
 
-cmake $CMAKE_ARGS -GNinja \
+# Should be able to remove -DCMAKE_POLICY_VERSION_MINIMUM after next release
+# (current: 2.0.1)
+$CMAKE $CMAKE_ARGS -GNinja \
     -DWORKBENCH_USE_QT5:BOOL=$WORKBENCH_USE_QT5 \
     -DWORKBENCH_USE_QT6:BOOL=$WORKBENCH_USE_QT6 \
+    -DCMAKE_OSX_ARCHITECTURES=x86_64 \
     -DWORKBENCH_MESA_DIR:STRING=$PREFIX \
     -DCMAKE_BUILD_TYPE:STRING=Release \
     -DCMAKE_INSTALL_PREFIX:STRING=$PREFIX \
     -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
     ../src
 
-cmake --build .
+$CMAKE --build .
 
-ctest --extra-verbose --output-on-failure .
+$CTEST --extra-verbose --output-on-failure .
 
-cmake --install .
+$CMAKE --install .
