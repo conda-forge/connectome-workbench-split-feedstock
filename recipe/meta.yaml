@@ -1,6 +1,6 @@
 {% set name = "connectome-workbench" %}
 {% set version = "2.0.1" %}
-{% set build = 4 %}
+{% set build = 5 %}
 
 {% set build = build + 100 %}  # [build_variant == "qt6"]
 
