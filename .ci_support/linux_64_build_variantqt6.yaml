@@ -21,7 +21,7 @@ freetype:
 openssl:
 - '3'
 qt6_main:
-- '6.8'
+- '6.9'
 qt_main:
 - '5.15'
 target_platform:
