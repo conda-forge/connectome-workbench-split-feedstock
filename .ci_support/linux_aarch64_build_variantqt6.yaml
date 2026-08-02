@@ -22,8 +22,6 @@ glib:
 - '2'
 openssl:
 - '3.5'
-qt_main:
-- '5.15'
 target_platform:
 - linux-aarch64
 zlib:
