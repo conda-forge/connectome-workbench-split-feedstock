@@ -24,6 +24,9 @@ build:
   number: {{ build }}
   string: "{{ build_variant }}_h{{ PKG_HASH }}_{{ build }}"
   skip: true  # [osx or win]
+  # quazip <1.4 (pinned by the qt5 variant below) was never built for linux-aarch64
+  # and won't be retroactively, so the qt5/aarch64 combination is unsatisfiable.
+  skip: true  # [aarch64 and build_variant == "qt5"]
 
 requirements:
   build:
