@@ -51,31 +51,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `connectome-workbench, connectome-workbench-cli, connectome-workbench-gui` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda install connectome-workbench connectome-workbench-cli connectome-workbench-gui
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba install connectome-workbench connectome-workbench-cli connectome-workbench-gui
 ```
 
-It is possible to list all of the versions of `connectome-workbench` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add connectome-workbench connectome-workbench-cli connectome-workbench-gui
+# for installing globally
+pixi global install connectome-workbench connectome-workbench-cli connectome-workbench-gui
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `connectome-workbench` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search connectome-workbench --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search connectome-workbench --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search connectome-workbench --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -87,6 +129,8 @@ mamba repoquery whoneeds connectome-workbench --channel conda-forge
 # List dependencies of `connectome-workbench`:
 mamba repoquery depends connectome-workbench --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge
